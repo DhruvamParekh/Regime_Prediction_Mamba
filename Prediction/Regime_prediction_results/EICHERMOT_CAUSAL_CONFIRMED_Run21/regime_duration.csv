@@ -1,0 +1,4 @@
+regime,true_avg_days,pred_avg_days,true_count,pred_count
+Bullish,120.4,43.7,12,16
+Neutral,44.9,38.7,15,19
+Bearish,79.3,61.3,10,21

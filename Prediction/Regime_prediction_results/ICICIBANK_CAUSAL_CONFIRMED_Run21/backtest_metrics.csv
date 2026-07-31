@@ -1,0 +1,4 @@
+strategy,total_ret_pct,annual_ret_pct,volatility_pct,sharpe,max_drawdown,win_rate_pct,days_in_market
+Model,8.01,3.38,12.56,0.269,-16.08,50.79,189
+Perfect Causal_confirmed Foresight,70.41,25.86,16.44,1.573,-13.62,58.7,322
+Buy and Hold,30.82,12.29,19.61,0.627,-18.37,51.2,582

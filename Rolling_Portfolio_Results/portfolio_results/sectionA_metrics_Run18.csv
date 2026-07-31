@@ -1,0 +1,6 @@
+Strategy,Total Ret %,Ann Ret %,Sharpe,Max DD %,Win Days %
+EqWt_LongOnly,83.2,21.51,2.222,-6.41,48.7
+EqWt_LongShort,103.99,25.79,2.518,-5.45,51.7
+AccWt_LongOnly,88.23,22.58,1.491,-10.25,47.6
+AccWt_LongShort,109.87,26.95,1.707,-10.01,50.9
+BnH_EqWt,76.91,20.15,1.708,-16.3,53.3

@@ -1,0 +1,10 @@
+period,pred_regime,n_days,avg_daily,cum_return,win_rate
+Train,Bullish,558,0.2183,195.073,52.87
+Train,Neutral,350,0.0493,12.166,48.29
+Train,Bearish,364,-0.2252,-59.183,46.15
+Val,Bullish,230,0.0939,22.278,49.57
+Val,Neutral,49,0.2692,13.88,55.1
+Val,Bearish,91,0.1142,10.459,54.95
+Test,Bullish,213,0.1733,41.624,56.81
+Test,Neutral,42,-0.113,-4.994,54.76
+Test,Bearish,335,0.0326,8.819,52.24

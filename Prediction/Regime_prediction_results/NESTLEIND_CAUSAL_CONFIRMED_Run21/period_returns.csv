@@ -1,0 +1,4 @@
+period,model_return_pct,bnh_return_pct,alpha_pct,days_in_market,days_total,pct_in_market
+Train,326.045,181.365,144.68,915,1273,71.9
+Val,45.101,54.714,-9.613,285,370,77.0
+Test,18.795,9.583,9.212,494,586,84.3

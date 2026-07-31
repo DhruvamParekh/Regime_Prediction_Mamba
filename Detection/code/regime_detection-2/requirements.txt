@@ -1,0 +1,30 @@
+# Regime Detection — Python dependencies
+#
+# IMPORTANT: mamba-ssm compiles custom CUDA kernels at install time. You
+# need an NVIDIA GPU with a working CUDA toolkit (nvcc on PATH) for
+# `pip install mamba-ssm` to succeed, and for the model to run at all.
+# There is no CPU fallback. See README.md before you spend time debugging
+# an install failure on a CPU-only machine.
+#
+# Install with:
+#   pip install -r requirements.txt
+
+# ── Core ML stack ───────────────────────────────────────────────────
+# Pin to a CUDA-enabled build that matches your GPU/driver. The original
+# project used the cu128 wheel index:
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+torch>=2.2
+torchvision
+torchaudio
+
+# Mamba state-space model — requires CUDA + nvcc to build.
+mamba-ssm
+einops
+
+# ── Data / ML utilities ─────────────────────────────────────────────
+numpy
+pandas
+scikit-learn
+
+# ── Plotting ─────────────────────────────────────────────────────────
+matplotlib

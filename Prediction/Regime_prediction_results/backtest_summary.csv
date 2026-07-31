@@ -1,0 +1,133 @@
+stock,strategy,total_ret_pct,annual_ret_pct,sharpe,max_drawdown,days_in_market
+HDFCBANK,Model,-3.06,-1.34,-0.074,-28.93,455
+HDFCBANK,Perfect Causal_confirmed Foresight,125.43,42.1,2.344,-10.75,385
+HDFCBANK,Buy and Hold,-7.27,-3.21,-0.155,-27.78,582
+ICICIBANK,Model,8.01,3.38,0.269,-16.08,189
+ICICIBANK,Perfect Causal_confirmed Foresight,70.41,25.86,1.573,-13.62,322
+ICICIBANK,Buy and Hold,30.82,12.29,0.627,-18.37,582
+AXISBANK,Model,-1.64,-0.71,-0.038,-25.03,299
+AXISBANK,Perfect Causal_confirmed Foresight,68.02,25.09,1.484,-8.98,342
+AXISBANK,Buy and Hold,17.77,7.31,0.3,-28.03,582
+KOTAKBANK,Model,-5.29,-2.32,-0.436,-8.68,35
+KOTAKBANK,Perfect Causal_confirmed Foresight,64.37,23.92,1.381,-9.31,312
+KOTAKBANK,Buy and Hold,3.22,1.38,0.059,-22.03,578
+SBIN,Model,-1.17,-0.51,-0.024,-31.1,440
+SBIN,Perfect Causal_confirmed Foresight,77.11,27.97,1.359,-22.69,433
+SBIN,Buy and Hold,53.96,20.47,0.798,-23.94,581
+INDUSINDBK,Model,75.77,27.55,0.825,-27.37,438
+INDUSINDBK,Perfect Causal_confirmed Foresight,156.64,50.19,1.544,-22.09,404
+INDUSINDBK,Buy and Hold,-41.59,-20.71,-0.573,-61.86,580
+BAJFINANCE,Model,-26.07,-12.22,-0.57,-28.41,342
+BAJFINANCE,Perfect Causal_confirmed Foresight,77.13,27.98,1.241,-19.09,348
+BAJFINANCE,Buy and Hold,24.74,10.01,0.361,-26.74,579
+BAJAJFINSV,Model,2.62,1.12,0.217,-5.41,49
+BAJAJFINSV,Perfect Causal_confirmed Foresight,74.33,27.1,1.484,-12.34,315
+BAJAJFINSV,Buy and Hold,4.85,2.06,0.086,-25.03,580
+SHRIRAMFIN,Model,36.24,14.2,1.005,-8.78,61
+SHRIRAMFIN,Perfect Causal_confirmed Foresight,272.19,75.81,2.305,-21.05,498
+SHRIRAMFIN,Buy and Hold,132.37,43.61,1.204,-29.0,583
+TCS,Model,14.45,6.0,0.754,-6.56,77
+TCS,Perfect Causal_confirmed Foresight,123.8,41.57,2.285,-10.17,372
+TCS,Buy and Hold,-35.11,-17.02,-0.775,-47.91,582
+INFY,Model,2.2,0.94,0.048,-31.41,341
+INFY,Perfect Causal_confirmed Foresight,243.19,70.25,3.154,-9.58,461
+INFY,Buy and Hold,-18.7,-8.54,-0.335,-43.62,581
+HCLTECH,Model,-20.95,-9.6,-0.956,-24.58,110
+HCLTECH,Perfect Causal_confirmed Foresight,162.63,51.37,2.089,-15.87,541
+HCLTECH,Buy and Hold,-10.83,-4.8,-0.188,-41.1,583
+WIPRO,Model,-20.24,-9.3,-0.395,-37.01,461
+WIPRO,Perfect Causal_confirmed Foresight,105.88,36.56,1.513,-14.24,432
+WIPRO,Buy and Hold,-7.44,-3.28,-0.12,-38.52,579
+TECHM,Model,-14.36,-6.47,-0.275,-34.36,487
+TECHM,Perfect Causal_confirmed Foresight,125.8,42.11,1.835,-13.0,425
+TECHM,Buy and Hold,17.66,7.27,0.275,-29.15,580
+MARUTI,Model,-38.87,-19.13,-1.283,-42.7,278
+MARUTI,Perfect Causal_confirmed Foresight,145.5,47.34,2.421,-11.52,392
+MARUTI,Buy and Hold,29.95,11.97,0.519,-28.83,582
+BAJAJ-AUTO,Model,-2.34,-1.01,-0.191,-13.19,41
+BAJAJ-AUTO,Perfect Causal_confirmed Foresight,149.38,48.04,2.185,-15.77,397
+BAJAJ-AUTO,Buy and Hold,56.08,21.06,0.812,-42.31,584
+HEROMOTOCO,Model,8.47,3.57,0.345,-15.41,105
+HEROMOTOCO,Perfect Causal_confirmed Foresight,171.21,53.81,2.236,-18.44,476
+HEROMOTOCO,Buy and Hold,32.66,12.97,0.488,-42.16,582
+EICHERMOT,Model,-21.45,-9.89,-0.491,-32.04,337
+EICHERMOT,Perfect Causal_confirmed Foresight,88.87,31.57,1.373,-19.58,406
+EICHERMOT,Buy and Hold,83.7,30.01,1.175,-19.58,582
+RELIANCE,Model,26.51,10.68,0.486,-35.07,580
+RELIANCE,Perfect Causal_confirmed Foresight,109.6,37.62,2.118,-11.37,391
+RELIANCE,Buy and Hold,4.49,1.91,0.087,-27.18,581
+ONGC,Model,34.99,13.75,0.538,-32.95,460
+ONGC,Perfect Causal_confirmed Foresight,88.04,31.14,1.162,-17.41,360
+ONGC,Buy and Hold,53.23,20.11,0.646,-32.26,584
+BPCL,Model,12.65,5.25,0.432,-12.9,68
+BPCL,Perfect Causal_confirmed Foresight,168.15,52.72,1.772,-18.41,476
+BPCL,Buy and Hold,44.99,17.29,0.536,-34.59,581
+NTPC,Model,5.94,2.52,0.125,-29.67,241
+NTPC,Perfect Causal_confirmed Foresight,84.06,30.12,1.235,-15.45,414
+NTPC,Buy and Hold,34.53,13.66,0.519,-32.3,574
+POWERGRID,Model,1.57,0.67,0.037,-19.96,222
+POWERGRID,Perfect Causal_confirmed Foresight,90.88,31.99,1.367,-13.25,402
+POWERGRID,Buy and Hold,34.88,13.71,0.514,-29.56,583
+COALINDIA,Model,29.72,11.88,0.437,-30.01,550
+COALINDIA,Perfect Causal_confirmed Foresight,132.72,43.98,1.703,-13.75,420
+COALINDIA,Buy and Hold,32.03,12.74,0.46,-30.84,579
+BEL,Model,141.32,46.25,1.498,-25.41,439
+BEL,Perfect Causal_confirmed Foresight,158.93,50.76,1.616,-19.8,431
+BEL,Buy and Hold,132.82,44.0,1.298,-26.9,579
+TATASTEEL,Model,-13.55,-6.09,-0.247,-30.07,370
+TATASTEEL,Perfect Causal_confirmed Foresight,132.59,43.94,1.587,-20.03,481
+TATASTEEL,Buy and Hold,56.43,21.3,0.719,-31.68,580
+JSWSTEEL,Model,2.8,1.19,0.087,-18.41,174
+JSWSTEEL,Perfect Causal_confirmed Foresight,30.62,12.15,0.733,-9.96,285
+JSWSTEEL,Buy and Hold,54.18,20.43,0.789,-14.95,583
+HINDALCO,Model,-44.91,-22.58,-0.928,-45.26,403
+HINDALCO,Perfect Causal_confirmed Foresight,154.96,49.45,1.767,-20.42,521
+HINDALCO,Buy and Hold,89.48,31.57,1.053,-26.23,585
+HINDUNILVR,Model,-20.91,-9.63,-0.574,-28.64,384
+HINDUNILVR,Perfect Causal_confirmed Foresight,75.13,27.35,1.51,-13.97,434
+HINDUNILVR,Buy and Hold,-12.29,-5.5,-0.268,-30.18,581
+ITC,Model,4.93,2.1,0.434,-4.92,35
+ITC,Perfect Causal_confirmed Foresight,89.54,31.77,1.927,-9.33,377
+ITC,Buy and Hold,-27.25,-12.83,-0.672,-39.63,580
+NESTLEIND,Model,22.08,8.99,0.495,-21.98,490
+NESTLEIND,Perfect Causal_confirmed Foresight,16.46,6.8,0.471,-22.25,266
+NESTLEIND,Buy and Hold,7.0,2.96,0.15,-21.98,582
+BRITANNIA,Model,1.72,0.74,0.073,-13.71,140
+BRITANNIA,Perfect Causal_confirmed Foresight,95.77,33.62,1.827,-12.04,392
+BRITANNIA,Buy and Hold,3.46,1.48,0.071,-29.02,582
+TATACONSUM,Model,-0.96,-0.42,-0.021,-29.34,427
+TATACONSUM,Perfect Causal_confirmed Foresight,75.53,27.48,1.358,-21.02,377
+TATACONSUM,Buy and Hold,9.2,3.87,0.161,-29.01,581
+ASIANPAINT,Model,25.89,10.44,0.606,-14.32,372
+ASIANPAINT,Perfect Causal_confirmed Foresight,72.58,26.55,1.375,-20.93,400
+ASIANPAINT,Buy and Hold,-20.42,-9.39,-0.419,-36.87,581
+TITAN,Model,-7.6,-3.36,-0.18,-30.63,370
+TITAN,Perfect Causal_confirmed Foresight,39.07,15.29,0.958,-11.77,321
+TITAN,Buy and Hold,11.01,4.61,0.197,-22.5,582
+SUNPHARMA,Model,39.08,15.21,1.17,-15.09,208
+SUNPHARMA,Perfect Causal_confirmed Foresight,42.3,16.35,1.367,-12.24,224
+SUNPHARMA,Buy and Hold,42.0,16.25,0.791,-19.13,585
+DRREDDY,Model,-10.01,-4.45,-0.279,-29.33,340
+DRREDDY,Perfect Causal_confirmed Foresight,30.49,12.17,0.884,-13.99,222
+DRREDDY,Buy and Hold,11.64,4.86,0.219,-22.98,581
+CIPLA,Model,-10.62,-4.73,-0.227,-28.49,397
+CIPLA,Perfect Causal_confirmed Foresight,52.33,19.91,1.088,-18.17,302
+CIPLA,Buy and Hold,11.28,4.72,0.2,-28.32,580
+DIVISLAB,Model,37.77,14.83,0.896,-15.44,293
+DIVISLAB,Perfect Causal_confirmed Foresight,80.07,28.89,1.275,-17.1,467
+DIVISLAB,Buy and Hold,72.73,26.6,1.047,-18.16,579
+LT,Model,22.53,9.16,0.464,-26.15,323
+LT,Perfect Causal_confirmed Foresight,39.84,15.57,0.776,-20.06,308
+LT,Buy and Hold,16.18,6.69,0.249,-24.35,582
+GRASIM,Model,-25.3,-11.77,-0.506,-41.24,563
+GRASIM,Perfect Causal_confirmed Foresight,106.97,36.65,2.187,-9.07,278
+GRASIM,Buy and Hold,52.41,19.83,0.84,-19.23,584
+ULTRACEMCO,Model,16.39,6.77,0.449,-15.12,205
+ULTRACEMCO,Perfect Causal_confirmed Foresight,48.41,18.57,0.96,-15.88,350
+ULTRACEMCO,Buy and Hold,14.76,6.12,0.261,-20.61,582
+APOLLOHOSP,Model,7.81,3.3,0.214,-16.53,288
+APOLLOHOSP,Perfect Causal_confirmed Foresight,98.82,34.52,1.895,-10.03,462
+APOLLOHOSP,Buy and Hold,46.28,17.83,0.827,-18.5,582
+ADANIPORTS,Model,28.59,11.46,0.855,-9.91,117
+ADANIPORTS,Perfect Causal_confirmed Foresight,79.81,28.81,0.882,-30.26,439
+ADANIPORTS,Buy and Hold,67.22,24.84,0.723,-33.78,579

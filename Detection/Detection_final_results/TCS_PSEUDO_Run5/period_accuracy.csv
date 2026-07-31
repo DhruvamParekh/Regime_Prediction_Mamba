@@ -1,0 +1,4 @@
+period,n_samples,overall_acc,Bearish_acc,Bearish_n,Neutral_acc,Neutral_n,Bullish_acc,Bullish_n
+Train,200,85.5,88.89,36,86.21,58,83.96,106
+Val,35,82.86,75.0,4,76.92,13,88.89,18
+Test,62,77.42,59.09,22,87.1,31,88.89,9

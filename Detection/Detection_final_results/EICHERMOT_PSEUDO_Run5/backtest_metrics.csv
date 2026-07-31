@@ -1,0 +1,4 @@
+strategy,total_ret_pct,annual_ret_pct,volatility_pct,sharpe,max_drawdown,win_rate_pct,days_in_market
+Model,47.09,20.74,17.25,1.202,-16.21,51.95,231
+Perfect Pseudo Foresight,82.06,33.99,19.26,1.765,-14.25,53.5,286
+Buy and Hold,76.05,31.82,23.56,1.35,-14.25,50.58,514

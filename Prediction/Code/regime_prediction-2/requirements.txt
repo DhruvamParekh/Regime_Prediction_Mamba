@@ -1,0 +1,16 @@
+# Core numerical / data stack
+numpy
+pandas
+scikit-learn
+matplotlib
+
+# Deep learning
+torch==2.6.0
+
+# Mamba SSM — REQUIRES an NVIDIA GPU with CUDA 12.6.
+# Cannot be installed via this file alone: causal-conv1d and
+# mamba-ssm both need --no-build-isolation and a working CUDA
+# toolchain. Run setup_env.sh instead of `pip install -r` for these.
+# causal-conv1d>=1.4.0
+# mamba-ssm==2.3.1
+einops

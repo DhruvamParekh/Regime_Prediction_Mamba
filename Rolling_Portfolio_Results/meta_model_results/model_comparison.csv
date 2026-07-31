@@ -1,0 +1,4 @@
+model,train_acc,test_acc,auc
+RandomForest,0.7031,0.7323,0.7466
+GradientBoosting,0.7129,0.7336,0.7437
+LogisticRegression,0.6729,0.714,0.6861
