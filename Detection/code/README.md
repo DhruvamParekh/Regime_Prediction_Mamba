@@ -41,56 +41,7 @@ installs, model construction/training will still fail or be unusably slow.
 detected, but this is not a supported path — it's there so the pipeline
 fails loudly and predictably rather than silently.
 
-**2. I could not verify exact numeric output against your original results.**
-Because I don't have a GPU available to install the real `mamba-ssm`, I
-validated this refactor two ways instead:
-  - Every file passes a Python syntax check, and every module imports
-    cleanly with correct cross-file wiring (no missing imports, no circular
-    imports, no leftover references to notebook-only globals).
-  - I ran the **entire pipeline end-to-end** — training, checkpointing,
-    full-history predictions, all five chart types, analysis, backtest,
-    latest-signal, and cross-stock summary — against synthetic OHLCV data,
-    using a lightweight stand-in class for `Mamba` (same constructor
-    signature and forward-pass shape, just a plain `nn.Linear` instead of
-    the real CUDA state-space kernel). It completed with zero errors and
-    produced exactly the file structure your real Run5 results have.
-  - What this does **not** prove: that the real Mamba kernel, once
-    installed on your GPU machine, will reproduce numbers identical to
-    your original notebook run. No computation was changed in the
-    refactor, so it should — but you should treat your first real run as a
-    verification pass, not just a "does it run" pass. Comparing a couple
-    of `feature_importance.csv` / `backtest_metrics.csv` files against your
-    original Run5 results for the same stock would confirm this.
 
-**3. One real bug found and fixed.**
-The original notebook's folder-setup step only created
-`processed/`, `results/`, and `checkpoints/`, and silently relied on
-`pseudo_regimes/` already existing on Google Drive from an earlier session.
-On a fresh clone/local run that folder doesn't exist, so the very first
-pseudo-label save would crash with `OSError: Cannot save file into a
-non-existent directory`. Fixed by adding `PSEUDO_PATH` to
-`FOLDERS_TO_CREATE` in `config.py`. This doesn't change any label values —
-it only ensures the folder exists before writing to it.
-
-**4. One structural (not logical) change: no more notebook globals.**
-The original notebook leaned on cell-execution order and shared global
-variables (e.g. `FEATURE_COLS`, `ALL_STOCK_FILES`, `ALL_RESULTS`, `DEVICE`)
-that only work because every cell runs top-to-bottom in one shared
-namespace. That doesn't translate to separate files. Every function that
-relied on a global now takes that value as an explicit argument instead
-(e.g. `compute_feature_importance(model, loader, feat_cols, device)`
-instead of reading a module-level `FEATURE_COLS`). The values passed in are
-identical to what the global held in the original notebook, so this does
-not change any computed number — it only makes the data flow explicit and
-traceable, which is what "proper code structure" requires across files.
-
-**5. `TARGET_DATE` is still hardcoded to `"2025-11-01"`.**
-Matches the original notebook's "nov2025 prediction" cell. Change it in
-`config.py` if you want the latest-signal chart for a different date —
-just make sure your data actually extends that far back from whatever date
-you pick (it needs `lookback_window` = 60 days of history before it).
-
----
 
 ## File-by-file guide
 
