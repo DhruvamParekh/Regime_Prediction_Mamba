@@ -1,268 +1,122 @@
-# Regime Detection
+# Regime Detection — Run 5 Results Guide
 
-A Mamba-based classifier that detects Bearish / Neutral / Bullish market
-regimes for a set of stocks, trained on pseudo labels, with full evaluation
-(accuracy, regime quality, backtest) and cross-stock summary reporting.
+This folder contains the curated results for Run 5 (pseudo-labels, 19 stocks).
+Each stock has its own subfolder named `{STOCK}_PSEUDO_Run5`, containing the
+same 12 files. Global cross-stock summary files sit at the root.
 
-This is a reorganized, multi-file version of a single ~4,200-line notebook
-export. All computational logic is unchanged from the original — this is a
-restructuring for readability, not a rewrite. See "Known issues & caveats"
-below for the handful of things worth knowing before you run it.
+**Note on terminology:** this is a regime *detection* system, not a forward
+price-prediction system — the model is classifying which regime (Bullish /
+Neutral / Bearish) a given date belongs to. The column/file names below still
+say `pred_*` / `prediction` etc. because that's what's literally in the code
+and CSVs, but read every instance of "predicted" as "detected" — it's the
+model's regime call for that date, not a forecast of future price.
 
----
-
-## Detection, not prediction
-
-This is a **detection** exercise, not a forecasting system. The labels the
-model is trained on (`labels/pseudo.py`) are built from a *forward* return
-window — looking `fwd_return_days` (60) days ahead of each date, smoothing,
-then thresholding into Bearish/Neutral/Bullish. Because those training
-labels are themselves derived from future price data, this project verifies
-that the Mamba architecture can pick up a regime signal at all, rather than
-producing a genuine walk-forward prediction. See the docstring at the top
-of `config.py` for the full explanation.
-
-(At *inference* time — see `evaluation/latest_signal.py` — the model only
-uses history up to the target date, no future data. It's specifically the
-*training labels* that use future information.)
+Train / Val / Test split used everywhere below:
+- **Train**: up to 2022-12-31
+- **Val**: 2023-01-01 to 2023-12-31
+- **Test**: 2024-01-01 onwards
 
 ---
 
-## Known issues & caveats — please read before running
+## Per-stock files (inside each `{STOCK}_PSEUDO_Run5/` folder)
 
-**1. GPU / CUDA is mandatory, not optional.**
-This model uses [`mamba-ssm`](https://github.com/state-spaces/mamba), which
-compiles custom CUDA kernels at install time. You need an NVIDIA GPU with a
-working CUDA toolkit (`nvcc` on your PATH) for `pip install mamba-ssm` to
-succeed at all — there is no CPU fallback. On a CPU-only machine,
-`pip install mamba-ssm` will most likely fail to build; if it somehow
-installs, model construction/training will still fail or be unusably slow.
-`main.py` prints a warning and will *attempt* to run on CPU if no GPU is
-detected, but this is not a supported path — it's there so the pipeline
-fails loudly and predictably rather than silently.
+### CSVs
 
-**2. I could not verify exact numeric output against your original results.**
-Because I don't have a GPU available to install the real `mamba-ssm`, I
-validated this refactor two ways instead:
-  - Every file passes a Python syntax check, and every module imports
-    cleanly with correct cross-file wiring (no missing imports, no circular
-    imports, no leftover references to notebook-only globals).
-  - I ran the **entire pipeline end-to-end** — training, checkpointing,
-    full-history predictions, all five chart types, analysis, backtest,
-    latest-signal, and cross-stock summary — against synthetic OHLCV data,
-    using a lightweight stand-in class for `Mamba` (same constructor
-    signature and forward-pass shape, just a plain `nn.Linear` instead of
-    the real CUDA state-space kernel). It completed with zero errors and
-    produced exactly the file structure your real Run5 results have.
-  - What this does **not** prove: that the real Mamba kernel, once
-    installed on your GPU machine, will reproduce numbers identical to
-    your original notebook run. No computation was changed in the
-    refactor, so it should — but you should treat your first real run as a
-    verification pass, not just a "does it run" pass. Comparing a couple
-    of `feature_importance.csv` / `backtest_metrics.csv` files against your
-    original Run5 results for the same stock would confirm this.
+**`full_predictions.csv`** — The core output. One row per detection point
+(every 7 trading days, per `prediction_freq`), covering the entire history,
+not just the test period.
+- `Date` — detection date
+- `true_idx` / `true_label` — the pseudo-label regime at that date (0=Bearish, 1=Neutral, 2=Bullish)
+- `pred_idx` / `pred_label` — the model's detected regime (column name says "pred", but it's a same-date classification, not a future forecast)
+- `p_bearish` / `p_neutral` / `p_bullish` — detected class probabilities
+- `confidence` — max probability across the three classes
 
-**3. One real bug found and fixed.**
-The original notebook's folder-setup step only created
-`processed/`, `results/`, and `checkpoints/`, and silently relied on
-`pseudo_regimes/` already existing on Google Drive from an earlier session.
-On a fresh clone/local run that folder doesn't exist, so the very first
-pseudo-label save would crash with `OSError: Cannot save file into a
-non-existent directory`. Fixed by adding `PSEUDO_PATH` to
-`FOLDERS_TO_CREATE` in `config.py`. This doesn't change any label values —
-it only ensures the folder exists before writing to it.
+**`period_accuracy.csv`** — Accuracy broken down by Train/Val/Test.
+- `overall_acc` — % of detections matching the true label
+- `Bullish_acc`, `Neutral_acc`, `Bearish_acc` — per-class recall (accuracy only on rows where that was the true regime)
+- `Bullish_n`, `Neutral_n`, `Bearish_n` — sample counts per class
 
-**4. One structural (not logical) change: no more notebook globals.**
-The original notebook leaned on cell-execution order and shared global
-variables (e.g. `FEATURE_COLS`, `ALL_STOCK_FILES`, `ALL_RESULTS`, `DEVICE`)
-that only work because every cell runs top-to-bottom in one shared
-namespace. That doesn't translate to separate files. Every function that
-relied on a global now takes that value as an explicit argument instead
-(e.g. `compute_feature_importance(model, loader, feat_cols, device)`
-instead of reading a module-level `FEATURE_COLS`). The values passed in are
-identical to what the global held in the original notebook, so this does
-not change any computed number — it only makes the data flow explicit and
-traceable, which is what "proper code structure" requires across files.
+**`regime_duration.csv`** — How long regimes actually lasted vs. how long the
+model's detected regimes lasted, per class.
+- `true_avg_days` / `pred_avg_days` — average duration of a regime "run" (true vs. detected)
+- `true_count` / `pred_count` — number of separate regime runs
 
-**5. `TARGET_DATE` is still hardcoded to `"2025-11-01"`.**
-Matches the original notebook's "nov2025 prediction" cell. Change it in
-`config.py` if you want the latest-signal chart for a different date —
-just make sure your data actually extends that far back from whatever date
-you pick (it needs `lookback_window` = 60 days of history before it).
+**`period_returns.csv`** — Return the model would have earned per period if
+it only held the stock while its regime detection said Bullish, vs. Buy & Hold.
+- `model_return_pct` — return while in market per model's detected calls
+- `bnh_return_pct` — Buy & Hold return over the same period
+- `alpha_pct` — model return minus Buy & Hold
+- `days_in_market` / `days_total` / `pct_in_market`
 
----
+**`regime_returns.csv`** — Daily-return stats broken down by which regime the
+model detected, per period.
+- `pred_regime` — the detected regime (naming holdover, not a forecast)
+- `n_days`, `avg_daily` (%), `cum_return` (%), `win_rate` (%)
 
-## File-by-file guide
+**`backtest_metrics.csv`** — The main test-period backtest. Compares three
+strategies: **Model** (long when regime detected as Bullish, else cash),
+**Perfect Pseudo Foresight** (long when the *true* label was Bullish — the
+theoretical ceiling), and **Buy and Hold**.
+- `total_ret_pct`, `annual_ret_pct`, `volatility_pct`, `sharpe`, `max_drawdown`, `win_rate_pct`, `days_in_market`
 
-### Root
+**`feature_importance.csv`** — Which input features the model relied on most
+for detecting the regime (gradient-based importance, averaged over training batches).
+- `feature`, `importance` (raw), `rank`, `importance_pct` (normalized to 100%)
 
-**`main.py`** — The entry point and only file you run directly
-(`python main.py`). Orchestrates every stage in the same order the original
-notebook's cells ran: setup → train all stocks → full-history charts →
-analysis → backtest → latest signal → cross-stock summary. Each stage is
-its own function (`run_training`, `run_analysis`, etc.) that calls into the
-modules below — read this file top to bottom to see the whole pipeline flow
-without digging into implementation details.
+### Charts
 
-**`config.py`** — Every constant, path, toggle, and hyperparameter lives
-here and nowhere else: data paths (with `REGIME_DETECTION_BASE` env var
-override), stock list, label source, pseudo-label thresholds, train/val/test
-split dates, model architecture sizes, training hyperparameters, and the
-regime name↔index mapping. This is the only file you should need to edit
-for routine use (changing which stocks to train, tweaking hyperparameters,
-pointing at a different data folder).
+**`{stock}_full_regime_chart.png`** — Price chart with the full detected
+regime history overlaid (train/val/test shaded), plus val/test accuracy in
+the title. Best single chart for "what regime did the model actually detect,
+over time."
 
-**`requirements.txt`** — Python dependencies, with install-order notes
-(PyTorch first, matching your CUDA version, then `mamba-ssm`).
+**`{stock}_analysis.png`** — 2×2 panel: period accuracy, regime duration
+comparison (true vs. detected), period returns, and regime returns —
+visual companion to the four CSVs above.
 
-**`dataset.py`** — Turns one stock's raw data into model-ready tensors:
-`assemble_stock_data()` merges engineered features with the input regime
-signal and the prediction target; `make_splits()` cuts that into
-Train/Val/Test by date; `RegimePredictionDataset` is the PyTorch `Dataset`
-that yields sliding lookback-window sequences.
+**`{stock}_confusion_matrices.png`** — Confusion matrices for Val and Test,
+showing exactly where the model confuses Bullish/Neutral/Bearish.
 
-**`model.py`** — The neural network itself. `MambaBlock` wraps a single
-Mamba state-space layer with pre-norm + residual connection.
-`RegimePredictionMamba` stacks several of these on top of a feature
-projection and a regime embedding, ending in a small classifier head. This
-is the file that requires the real `mamba-ssm` package to import.
+**`{stock}_backtest.png`** — Cumulative return curves for Model vs. Perfect
+Foresight vs. Buy & Hold over the test period, with a position (long/cash)
+strip underneath. Visual companion to `backtest_metrics.csv`.
 
-**`training.py`** — Everything needed to train one stock's model: class
-weights (to counter regime imbalance), gradient-based feature importance,
-one training epoch, evaluation, and the full `train_model()` loop with
-checkpointing on best validation accuracy and early stopping.
-
-### `data/`
-
-**`data/loaders.py`** — Reads raw CSVs off disk: `load_stock_csv()` for
-individual stock OHLCV files, `load_macro()` for the shared macro-economic
-file (repo rate, CPI, INR/USD), `load_nifty()` for the NIFTY50 index (used
-as a market-wide feature). `discover_stock_files()` scans the raw data
-folder and figures out which files are stocks vs. the shared macro/NIFTY
-files.
-
-**`data/features.py`** — `compute_features()`: turns raw price/macro/NIFTY
-data into the 21 engineered features the model trains on — returns,
-moving averages, RSI, MACD, rolling volatility, ATR, Bollinger band width,
-drawdown, Sharpe ratio, volume/volatility ratios, and macro features.
-
-### `labels/`
-
-**`labels/pseudo.py`** — `generate_pseudo_labels()`: builds the
-forward-looking pseudo regime labels described above (this is the file
-most directly responsible for why this is a "detection" project — it uses
-future returns to build training labels). `load_or_generate_pseudo()`
-caches these to disk per stock so they're not recomputed every run.
-
-**`labels/targets.py`** — `load_regime_labels()`: loads the per-day input
-regime signal, either from the cached pseudo labels or from a
-`{stock}_detected.csv` file if `LABEL_SOURCE='detected'` (falls back to
-pseudo if that file doesn't exist). `build_prediction_labels()`: turns that
-day-by-day regime series into the actual training target — the *majority*
-regime over the next `forward_window` (7) days.
-
-### `evaluation/`
-
-**`evaluation/predictions.py`** — `get_full_predictions()`: reloads a
-stock's best checkpoint and runs it over its *entire* history (not just the
-test period) to build a full prediction timeline. `plot_full_regime_chart()`:
-the 4-panel chart (price with regime-colored dots, predicted regime
-timeline, stacked probability area, confidence over time).
-
-**`evaluation/analysis.py`** — Three analysis functions plus their plots:
-`analyze_period_accuracy()` (accuracy by Train/Val/Test and by class),
-`analyze_regime_quality()` (true vs. detected regime run durations, and how
-quickly transitions are picked up), `analyze_returns_by_regime()` (what
-you'd have earned trading on the detected regime vs. Buy & Hold).
-`plot_analysis()` draws the 2x2 summary panel; `plot_confusion_matrices()`
-draws Train/Val/Test confusion matrices.
-
-**`evaluation/backtest.py`** — `run_backtest()`: a long/cash backtest over
-the test period only, comparing three strategies (Model, Perfect Foresight
-using the true labels, Buy & Hold) with no transaction costs or shorting.
-`plot_backtest()`: cumulative return curves plus a position (long/cash)
-strip underneath.
-
-**`evaluation/latest_signal.py`** — `predict_specific_week()`: runs
-inference for a single target date using only history up to that date (no
-future data at inference time — see the "Detection, not prediction" note
-above). `plot_prediction_context()`: shows the lookback-window price
-history leading up to that call, with the detected regime and transition
-status displayed clearly.
-
-### `summary/`
-
-**`summary/cross_stock.py`** — `build_cross_stock_summary()`: pulls
-accuracy, backtest, and feature-importance results from every trained stock
-into one table. `plot_cross_stock_summary()`: three comparison charts (Val
-vs. Test accuracy, Model vs. Buy & Hold returns, alpha bars).
-`print_cross_stock_summary()`: prints a readable report and saves the
-summary table plus aggregated cross-stock feature importance to CSV.
+**`{stock}_nov2025_prediction.png`** — Most recent regime detection: current
+regime, next regime the model detects a shift toward, whether a transition is
+flagged, and class probabilities. Despite the filename, this is the "latest
+detected signal" chart, not a price forecast.
 
 ---
 
-## Project structure
+## Cross-stock files (folder root)
 
-```
-regime_detection/
-├── main.py
-├── config.py
-├── requirements.txt
-├── dataset.py
-├── model.py
-├── training.py
-├── data/
-│   ├── loaders.py
-│   └── features.py
-├── labels/
-│   ├── pseudo.py
-│   └── targets.py
-├── evaluation/
-│   ├── predictions.py
-│   ├── analysis.py
-│   ├── backtest.py
-│   └── latest_signal.py
-└── summary/
-    └── cross_stock.py
-```
+**`backtest_summary.csv`** — `backtest_metrics.csv` for every stock, stacked
+into one table, for comparing strategies across the whole universe.
+
+**`cross_stock_summary_PSEUDO_Run5.csv`** / **`.png`** — One row per stock:
+val/test accuracy, backtest returns, Sharpe, max drawdown, top feature. The
+fastest way to see which stocks the model detects regimes well on.
+
+**`cross_stock_feature_importance_PSEUDO_Run5.csv`** — Feature importance
+averaged across all stocks, to see which inputs matter for regime detection
+in general vs. just for one ticker.
 
 ---
 
-## Setup
+## Suggested reading order
 
-1. Get a CUDA-capable machine (see caveat #1 above).
-2. Install PyTorch matching your CUDA version first (see the note at the
-   top of `requirements.txt`), then:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Point the pipeline at your data. By default it looks for a
-   `project_data/` folder next to `config.py`; override with:
-   ```bash
-   export REGIME_DETECTION_BASE=/path/to/your/data
-   ```
-   Your data folder needs this structure:
-   ```
-   <BASE>/
-   └── data/
-       └── raw/
-           ├── NIFTY50_INDEX.csv
-           ├── macro_features.csv
-           └── {STOCK}.csv          # one file per stock, OHLCV format
-   ```
-   (`results/`, `checkpoints/`, and `pseudo_regimes/` are created
-   automatically on first run.)
-4. Edit `config.py` to set `STOCKS_TO_TRAIN`, `LABEL_SOURCE`, `RUN_ID`, and
-   any hyperparameters you want to change.
-5. Run:
-   ```bash
-   python main.py
-   ```
+1. `cross_stock_summary_PSEUDO_Run5.csv` — get the lay of the land across all 19 stocks
+2. Pick a stock of interest → `{stock}_full_regime_chart.png` — see what regime it actually detected over time
+3. `{stock}_backtest.png` + `backtest_metrics.csv` — did acting on the detected regime make money
+4. `{stock}_confusion_matrices.png` + `period_accuracy.csv` — was the detection actually accurate, or lucky
+5. `{stock}_nov2025_prediction.png` — what regime is it detecting right now
 
-## Output
+---
 
-Same structure as the original notebook — one folder per stock under
-`<BASE>/results/{STOCK}_{LABEL_SOURCE}_Run{RUN_ID}/`, containing
-predictions, training history, feature importance, period accuracy, regime
-duration/returns, backtest metrics, and five charts. Cross-stock summary
-CSVs/PNGs and `backtest_summary.csv` are written at the results root.
+## What's *not* in this folder (intentionally excluded)
+
+- `predictions.csv` — test-set-only detections; superseded by `full_predictions.csv`
+- `training_history.csv` — epoch-by-epoch training loss/accuracy curves; useful only if debugging training itself
+- `true_regime_runs.csv` / `pred_regime_runs.csv` — raw list of every individual regime run; already summarized in `regime_duration.csv`
+
+These still exist in the original `Run5 all results` folder if needed later.
