@@ -11,7 +11,7 @@ below for the handful of things worth knowing before you run it.
 
 ---
 
-## Detection, not prediction
+## Detection
 
 This is a **detection** exercise, not a forecasting system. The labels the
 model is trained on (`labels/pseudo.py`) are built from a *forward* return
